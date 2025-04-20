@@ -15,6 +15,7 @@ let rates = {};
 //default deyerler
 let fromCurrency = 'RUB';
 let toCurrency = 'USD';
+let lastEdited = 'from'; // son yazılan inputu saxlayırıq
 
 //API ile valyutalarin alinmasi
 async function getRates() {
@@ -43,17 +44,34 @@ function convert(amount, from, to) {
 
 // UI-ni yenileyir
 function updateUI() {
-    const amount = parseFloat(fromInput.value) || 0;
-        // Eyni valyuta olduqda sadece meblegi gosdermek(apiye sorgu getmeden)
+    if (!rates[fromCurrency] || !rates[toCurrency]) return;
+
+    const fromAmount = parseFloat(fromInput.value) || 0;
+    const toAmount = parseFloat(toInput.value) || 0;
+
     if (fromCurrency === toCurrency) {
-        toInput.value = amount.toFixed(2);
         fromInfo.textContent = `1 ${fromCurrency} = 1.000000 ${toCurrency}`;
         toInfo.textContent = `1 ${toCurrency} = 1.000000 ${fromCurrency}`;
-    } else {
-        const result = convert(amount, fromCurrency, toCurrency);
+        if (lastEdited === 'from') {
+            toInput.value = fromAmount.toFixed(2);
+        } else {
+            fromInput.value = toAmount.toFixed(2);
+        }
+        return;
+    }
+
+    const rateFromTo = (1 / rates[fromCurrency]) * rates[toCurrency];
+    const rateToFrom = rates[fromCurrency] / rates[toCurrency];
+
+    fromInfo.textContent = `1 ${fromCurrency} = ${rateFromTo.toFixed(6)} ${toCurrency}`;
+    toInfo.textContent = `1 ${toCurrency} = ${rateToFrom.toFixed(6)} ${fromCurrency}`;
+
+    if (lastEdited === 'from') {
+        const result = convert(fromAmount, fromCurrency, toCurrency);
         toInput.value = result.toFixed(2);
-        fromInfo.textContent = `1 ${fromCurrency} = ${(1 / rates[fromCurrency] * rates[toCurrency]).toFixed(6)} ${toCurrency}`;
-        toInfo.textContent = `1 ${toCurrency} = ${(rates[fromCurrency] / rates[toCurrency]).toFixed(6)} ${fromCurrency}`;
+    } else {
+        const result = convert(toAmount, toCurrency, fromCurrency);
+        fromInput.value = result.toFixed(2);
     }
 }
 
@@ -69,22 +87,23 @@ function handleCurrencySelection(menu, isFrom) {
     });
 }
 
-// İstifadəçi mebleği deyişdikde UI yenileyen funk.
-fromInput.addEventListener('input', updateUI);
-
-// Əksinə çevirmə
-toInput.addEventListener('input', () => {
-    const amount = parseFloat(toInput.value) || 0;
-    fromInput.value = convert(amount, toCurrency, fromCurrency).toFixed(2);
+// Inputlara dinləyici əlavə edilir
+fromInput.addEventListener('input', () => {
+    lastEdited = 'from';
+    updateUI();
 });
 
-// Valyuta seçimlərini aktiv edilir
+toInput.addEventListener('input', () => {
+    lastEdited = 'to';
+    updateUI();
+});
+
+// Valyuta seçimlərini aktiv edir
 handleCurrencySelection(fromMenu, true);
 handleCurrencySelection(toMenu, false);
 
 // İlk açılışda valyuta məzənnələrini aliriq
 getRates();
-
 setInterval(getRates, 10 * 60 * 1000);
 
 //Wifi meselesi 
