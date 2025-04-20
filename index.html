@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/favicon.png" type="png">
+    <link rel="stylesheet" href="style.css">
+    <title>Valyuta Mubadilesi</title>
+
+</head>
+
+<body>
+    <header>
+        <div id="offline-alert" class="alert-wifi">
+            İnternet bağlantısı yoxdur
+        </div>
+
+        <div class="nav">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <img class="logo" src="images/logo.png" alt="logo">
+            <div class="nav-items">
+                <div class="nav-item">БАНК</div>
+                <div class="nav-item">БИЗНЕС</div>
+                <div class="nav-item">ИНВЕСТИЦИИ</div>
+                <div class="nav-item">СТРАХОВАНИЕ</div>
+                <div class="nav-item">МОБАЙЛ</div>
+                <div class="nav-item">ПУТЕШЕСТВИЯ</div>
+                <div class="nav-item">РАЗВЛЕЧЕНИЯ</div>
+            </div>
+            <button class="logout">ВОЙТИ</button>
+        </div>
+    </header>
+    <h1 class="title">Конвертер валют онлайн</h1>
+
+    <div class="converter-container">
+        <div class="box">
+            <p class="label">У меня есть</p>
+            <div class="currency-menu" id="from-currency-menu">
+                <div class="currency-option active" data-currency="RUB">RUB</div>
+                <div class="currency-option" data-currency="USD">USD</div>
+                <div class="currency-option" data-currency="EUR">EUR</div>
+                <div class="currency-option" data-currency="GBP">GBP</div>
+            </div>
+            <div class="input-box">
+                <input type="number" class="amount-input" id="from-amount" value="100">
+                <div class="info-text" id="from-info">1 RUB = 0.014 USD</div>
+            </div>
+        </div>
+
+        <div class="box">
+            <p class="label">Хочу приобрести</p>
+            <div class="currency-menu" id="to-currency-menu">
+                <div class="currency-option" data-currency="RUB">RUB</div>
+                <div class="currency-option active" data-currency="USD">USD</div>
+                <div class="currency-option" data-currency="EUR">EUR</div>
+                <div class="currency-option" data-currency="GBP">GBP</div>
+            </div>
+            <div class="input-box">
+                <input class="amount-input" type="number" id="to-amount" value="">
+                <div class="info-text" id="to-info">1 USD = 71.43 RUB</div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
